@@ -78,33 +78,21 @@ export default {
 
 <template>
   <div>
-    <div class="details flex justify-center">
-      <i><DocumentationIcon /></i>
-      <h3>Visits</h3>
+    <div class="details justify-center py-5">
+      <h1 class="text-xl text-black-800">Hello, here you can:</h1>
+      <ul>
+        <li>create / edit / observe [Doctors]</li>
+        <li>create / edit / observe [Patients]</li>
+        <li>create / edit / observe [Medicines]</li>
+        <li>create / edit / observe [Visits]</li>
+        <li>search [Visits] by date range</li>
+      </ul>
+      <hr class="h-5 bg-gray-100 m-auto mt-4" />
+      <h2 class="text-lg text-black-700 py-5">
+        Firstly make sure [Patient] exists. Then create a [Doctor]. [Medicine]
+        is optional.
+      </h2>
+      <p>For now, there is no nesessary fields.</p>
     </div>
-    <div class="flex">
-      <VisitsItem v-for="visit of this.visits" :key="visit.id" :data="visit" />
-    </div>
-
-    <WelcomeItem>
-      <template #icon>
-        <ToolingIcon />
-      </template>
-      <template #heading>Patients</template>
-    </WelcomeItem>
-
-    <WelcomeItem>
-      <template #icon>
-        <EcosystemIcon />
-      </template>
-      <template #heading>Medicines</template>
-    </WelcomeItem>
-
-    <WelcomeItem>
-      <template #icon>
-        <CommunityIcon />
-      </template>
-      <template #heading>Doctors</template>
-    </WelcomeItem>
   </div>
 </template>

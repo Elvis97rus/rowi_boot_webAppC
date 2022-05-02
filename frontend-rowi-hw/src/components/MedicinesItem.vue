@@ -11,25 +11,23 @@ export default {
   data() {
     return {
       id: 0,
-      name: null,
-      gender: null,
-      birthDate: "0001-01-01T00:00:00",
-      address: null,
-      textInputOptions: "",
-      popupCreateItem: 0,
+      name: "",
+      useMethod: "",
+      effects: "",
+      sideEffects: "",
     };
   },
   props: ["data", "popup"],
-  emits: ["modalClose", "patientsRefresh"],
+  emits: ["modalClose", "medicinesRefresh"],
   methods: {
     async save() {
       if (!this.id) {
         console.log("post");
-        let response = await HTTP.post(`/api/patients`, {
+        let response = await HTTP.post(`/api/medicines`, {
           name: this.name,
-          gender: this.gender,
-          birthDate: this.birthDate,
-          address: this.address,
+          useMethod: this.useMethod,
+          effects: this.effects,
+          sideEffects: this.sideEffects,
         });
 
         if (response.data) {
@@ -38,12 +36,12 @@ export default {
           setTimeout(this.$toast.clear, 100);
         }
       } else {
-        let response = await HTTP.put(`/api/patients/${this.id}`, {
+        let response = await HTTP.put(`/api/medicines/${this.id}`, {
           Id: this.id,
           name: this.name,
-          gender: this.gender,
-          birthDate: this.birthDate,
-          address: this.address,
+          useMethod: this.useMethod,
+          effects: this.effects,
+          sideEffects: this.sideEffects,
         });
 
         //if (response.data) {
@@ -55,7 +53,7 @@ export default {
       this.refreshClose();
     },
     refreshClose() {
-      this.$emit("patientsRefresh");
+      this.$emit("medicinesRefresh");
       this.$emit("modalClose");
     },
   },
@@ -68,16 +66,16 @@ export default {
     console.log(this.popup);
     this.id = this.data.id ?? 0;
     this.name = this.data.name ?? "";
-    this.gender = this.data.gender ?? "";
-    this.birthDate = new Date(this.data.birthDate);
-    this.address = this.data.address ?? "";
+    this.useMethod = this.data.useMethod ?? "";
+    this.effects = this.data.effects ?? "";
+    this.sideEffects = this.data.sideEffects ?? "";
   },
   setup() {},
 };
 </script>
 
 <template>
-  <div class="mt-10 sm:mt-0">
+  <div class="mt-10 sm:mt-0 py-2">
     <span
       class="text-lg float-right cursor-pointer ml-5"
       v-if="this.popupCreateItem"
@@ -85,20 +83,20 @@ export default {
       >&times;</span
     >
     <div class="md:grid md:grid-cols-3 md:gap-6">
-      <div class="md:col-span-1">
+      <div class="md:col-span-1 m-auto">
         <div class="px-4 sm:px-0">
           <h3
             class="text-lg font-medium leading-6 text-gray-900"
             v-if="this.id"
           >
             <a
-              :href="`/patients/${this.id}`"
+              :href="`/medicines/${this.id}`"
               class="text-blue-500 hover:text-blue-900"
-              >Patient #{{ this.id }}</a
+              >Medicine #{{ this.id }}</a
             >
           </h3>
           <h3 class="text-lg font-medium leading-6 text-gray-900" v-else>
-            <span>Create New Patient</span>
+            <span>Create New Medicine</span>
           </h3>
           <p class="mt-1 text-sm text-gray-600">Fill the Information</p>
         </div>
@@ -112,67 +110,79 @@ export default {
                   <label
                     for="name"
                     class="block text-sm font-medium text-gray-700"
-                    >Patient Name</label
+                    >Medicine Name</label
                   >
                   <input
                     type="text"
                     name="name"
                     id="name"
                     v-model="this.name"
-                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    :class="
+                      this.isSingleItem
+                        ? 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                        : 'pointer-events-none outline-none mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                    "
                   />
                 </div>
                 <div class="col-span-6 sm:col-span-3">
                   <label
-                    for="gender"
+                    for="useMethod"
                     class="block text-sm font-medium text-gray-700"
-                    >Gender</label
-                  >
-                  <select
-                    id="gender"
-                    name="gender"
-                    v-model="this.gender"
-                    class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  >
-                    <option>Male</option>
-                    <option>Female</option>
-                  </select>
-                </div>
-
-                <div class="col-span-6 sm:col-span-3">
-                  <label
-                    for="country"
-                    class="block text-sm font-medium text-gray-700"
-                    >Date</label
-                  >
-                  <Datepicker
-                    v-model="this.birthDate"
-                    :textInputOptions="textInputOptions"
-                  />
-                </div>
-
-                <div
-                  class="col-span-6 sm:col-span-3"
-                  v-if="this.isSingleItem || this.popupCreateItem"
-                >
-                  <label
-                    for="address"
-                    class="block text-sm font-medium text-gray-700"
-                    >Patient Address</label
+                    >Use Method</label
                   >
                   <input
                     type="text"
-                    v-model="this.address"
-                    name="address"
-                    id="address"
-                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    name="useMethod"
+                    id="useMethod"
+                    v-model="this.useMethod"
+                    :class="
+                      this.isSingleItem
+                        ? 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                        : 'pointer-events-none outline-none mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                    "
+                  />
+                </div>
+                <div class="col-span-6 sm:col-span-3">
+                  <label
+                    for="effects"
+                    class="block text-sm font-medium text-gray-700"
+                    >Effects</label
+                  >
+                  <input
+                    type="text"
+                    name="effects"
+                    id="effects"
+                    v-model="this.effects"
+                    :class="
+                      this.isSingleItem
+                        ? 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                        : 'pointer-events-none outline-none mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                    "
+                  />
+                </div>
+                <div class="col-span-6 sm:col-span-3">
+                  <label
+                    for="sideEffects"
+                    class="block text-sm font-medium text-gray-700"
+                    >Side Effects</label
+                  >
+                  <input
+                    type="text"
+                    name="sideEffects"
+                    id="sideEffects"
+                    v-model="this.sideEffects"
+                    :class="
+                      this.isSingleItem
+                        ? 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                        : 'pointer-events-none outline-none mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                    "
                   />
                 </div>
               </div>
             </div>
             <div
               class="px-4 py-3 bg-gray-50 text-right sm:px-6"
-              v-if="this.isSingleItem || this.popupCreateItem"
+              v-if="this.isSingleItem || this.popupCreateItem || this.popup"
             >
               <button
                 type="submit"

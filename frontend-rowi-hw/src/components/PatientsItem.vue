@@ -72,7 +72,7 @@ export default {
 </script>
 
 <template>
-  <div class="mt-10 sm:mt-0">
+  <div class="mt-10 sm:mt-0 py-2">
     <span
       class="text-lg float-right cursor-pointer ml-5"
       v-if="this.popupCreateItem"
@@ -80,7 +80,7 @@ export default {
       >&times;</span
     >
     <div class="md:grid md:grid-cols-3 md:gap-6">
-      <div class="md:col-span-1">
+      <div class="md:col-span-1 m-auto">
         <div class="px-4 sm:px-0">
           <h3
             class="text-lg font-medium leading-6 text-gray-900"
@@ -114,7 +114,11 @@ export default {
                     name="name"
                     id="name"
                     v-model="this.name"
-                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    :class="
+                      this.isSingleItem
+                        ? 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                        : 'pointer-events-none outline-none mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                    "
                   />
                 </div>
                 <div class="col-span-6 sm:col-span-3">
@@ -127,7 +131,11 @@ export default {
                     id="gender"
                     name="gender"
                     v-model="this.gender"
-                    class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    :class="
+                      this.isSingleItem
+                        ? 'mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+                        : 'pointer-events-none outline-none mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+                    "
                   >
                     <option>Male</option>
                     <option>Female</option>
@@ -141,6 +149,11 @@ export default {
                     >Date</label
                   >
                   <Datepicker
+                    :class="
+                      this.isSingleItem
+                        ? ''
+                        : 'pointer-events-none outline-none'
+                    "
                     v-model="this.birthDate"
                     :textInputOptions="textInputOptions"
                   />
@@ -160,7 +173,11 @@ export default {
                     v-model="this.address"
                     name="address"
                     id="address"
-                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    :class="
+                      this.isSingleItem
+                        ? 'mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+                        : 'pointer-events-none outline-none mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+                    "
                   />
                 </div>
               </div>
