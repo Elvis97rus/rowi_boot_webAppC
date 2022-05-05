@@ -16,11 +16,10 @@ export default {
     };
   },
   props: ["data", "popup"],
-  emits: ["modalClose", "patientsRefresh"],
+  emits: ["modalClose", "doctorsRefresh"],
   methods: {
     async save() {
       if (!this.id) {
-        console.log("post");
         let response = await HTTP.post(`/api/doctors`, {
           name: this.name,
         });
@@ -28,7 +27,6 @@ export default {
         if (response.data) {
           this.$toast.success(`Created.`);
           this.popupCreateItem = 0;
-          setTimeout(this.$toast.clear, 100);
         }
       } else {
         let response = await HTTP.put(`/api/doctors/${this.id}`, {
@@ -36,20 +34,18 @@ export default {
           name: this.name,
         });
 
-        let instance = this.$toast.success(`Updated.`);
-        this.$toast.clear;
+        this.$toast.success(`Updated.`);
       }
       this.refreshClose();
     },
     refreshClose() {
-      this.$emit("patientsRefresh");
+      this.$emit("doctorsRefresh");
       this.$emit("modalClose");
     },
   },
   mounted() {
     this.popupCreateItem = this.popup ?? 0;
     this.isSingleItem = this.$route.params.id ?? false;
-
     this.id = this.data.id ?? 0;
     this.name = this.data.name ?? "";
   },
@@ -58,7 +54,7 @@ export default {
 </script>
 
 <template>
-  <div class="mt-10 sm:mt-0">
+  <div class="mt-10 sm:mt-0 py-2">
     <span
       class="text-lg float-right cursor-pointer ml-5"
       v-if="this.popupCreateItem"
@@ -66,7 +62,7 @@ export default {
       >&times;</span
     >
     <div class="md:grid md:grid-cols-3 md:gap-6">
-      <div class="md:col-span-1">
+      <div class="md:col-span-1 m-auto">
         <div class="px-4 sm:px-0">
           <h3
             class="text-lg font-medium leading-6 text-gray-900"
@@ -100,7 +96,11 @@ export default {
                     name="name"
                     id="name"
                     v-model="this.name"
-                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    :class="
+                      this.isSingleItem
+                        ? 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                        : 'pointer-events-none outline-none mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                    "
                   />
                 </div>
               </div>

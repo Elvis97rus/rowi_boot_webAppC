@@ -31,6 +31,20 @@ namespace WebApp_c.Controllers
             return visit;
         }
 
+        // Post: /api/visits
+        /*
+        _payload_ 
+        {
+            "visitDate": "1994-03-06T03:00:00",
+            "visitPlace": "Country 2, City n1, some street 45",
+            "diagnosis": "COVID_92",
+            "recommendation": "",
+            "medicine": 1,
+            "doctor": 1,
+            "patient": 1
+        }
+        */
+
         [HttpPost]
         public ActionResult<Visit> PostVisit(Visit visit)
         {

@@ -1,8 +1,19 @@
 2nd
-patient - [id,name,gender,birthDate, address]
-doctor - [id, name]
-visit - [id,visitDate,visitPlace, symptoms, diagnosis, recommendations, patientId, doctorId, medicineId?]
-medicine - [id, name, useMethod, effects, sidEffects ]
+
+check DB preferences [visits]
+
+backend - /
+    npm i && dotnet build && dotnet run
+frontend - /frontend-rowi-hw
+    npm i && npm run dev
+api url - /frontend-rowi-hw/api
+
+
+DB
+    patient - [id,name,gender,birthDate, address]
+    doctor - [id, name]
+    visit - [id,visitDate,visitPlace, symptoms, diagnosis, recommendations, patientId, doctorId, medicineId?]
+    medicine - [id, name, useMethod, effects, sidEffects ]
 ------------------------------------
 sqlcmd -S 127.0.0.1 -U SA
 create database [db-name];

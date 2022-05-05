@@ -11,6 +11,7 @@ export default {
       patient: "",
       doctor: "",
       medicine: "",
+      medicines: "",
       diagnosis: "",
       recommendation: "",
       textInputOptions: "",
@@ -20,12 +21,11 @@ export default {
     };
   },
   props: ["data", "popup", "doctors", "medicines", "patients"],
-  emits: ["modalClose", "patientsRefresh"],
+  emits: ["modalClose", "visitsRefresh"],
   methods: {
     async save() {
       if (!this.id) {
-        console.log("post");
-        let response = await HTTP.post(`/api/patients`, {
+        let response = await HTTP.post(`/api/visits`, {
           name: this.name,
           gender: this.gender,
           birthDate: this.birthDate,
@@ -54,18 +54,16 @@ export default {
       this.refreshClose();
     },
     refreshClose() {
-      this.$emit("patientsRefresh");
+      this.$emit("visitsRefresh");
       this.$emit("modalClose");
     },
   },
   mounted() {
     this.popupCreateItem = this.popup ?? 0;
     this.isSingleItem = this.$route.params.id ?? false;
-    //this.layout = this.$route.params.id ? "w-full" : "basis-1/4";
     const textInputOptions = ref({
       format: "MM/dd/yyyy",
     });
-    console.log(this.popupCreateItem);
     this.id = this.data.id ?? 0;
     this.visitDate = new Date(this.data.visitDate);
     this.visitPlace = this.data.visitPlace ?? "";
@@ -80,7 +78,7 @@ export default {
 </script>
 
 <template>
-  <div class="mt-10 sm:mt-0">
+  <div class="mt-10 sm:mt-0 py-2">
     <span
       class="text-lg float-right cursor-pointer ml-5"
       v-if="this.popupCreateItem"
@@ -88,7 +86,7 @@ export default {
       >&times;</span
     >
     <div class="md:grid md:grid-cols-3 md:gap-6">
-      <div class="md:col-span-1">
+      <div class="md:col-span-1 m-auto">
         <div class="px-4 sm:px-0">
           <h3
             class="text-lg font-medium leading-6 text-gray-900"
@@ -121,7 +119,11 @@ export default {
                     id="patient"
                     name="patient"
                     v-model="this.patient"
-                    class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    :class="
+                      this.isSingleItem
+                        ? 'mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+                        : 'pointer-events-none outline-none mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+                    "
                   >
                     <option
                       v-for="patient of this.patients"
@@ -146,8 +148,12 @@ export default {
                   <select
                     id="doctor"
                     name="doctor"
-                    v-model="this.doctors"
-                    class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    v-model="this.doctor"
+                    :class="
+                      this.isSingleItem
+                        ? 'mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+                        : 'pointer-events-none outline-none mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+                    "
                   >
                     <option
                       v-for="doctor of this.doctors"
@@ -162,12 +168,18 @@ export default {
 
                 <div class="col-span-6 sm:col-span-3">
                   <label
-                    for="country"
+                    for="visitDate"
                     class="block text-sm font-medium text-gray-700"
-                    >Date</label
+                    >Visit Date</label
                   >
                   <Datepicker
+                    id="visitDate"
                     v-model="this.visitDate"
+                    :class="
+                      this.isSingleItem
+                        ? ''
+                        : 'pointer-events-none outline-none'
+                    "
                     :textInputOptions="textInputOptions"
                   />
                 </div>
@@ -190,10 +202,7 @@ export default {
                   />
                 </div>
 
-                <div
-                  class="col-span-6 sm:col-span-6 lg:col-span-2"
-                  v-if="this.isSingleItem || this.popupCreateItem"
-                >
+                <div class="col-span-6 sm:col-span-6 lg:col-span-2">
                   <label
                     for="diagnosis"
                     class="block text-sm font-medium text-gray-700"
@@ -220,11 +229,17 @@ export default {
                   <select
                     id="medicine"
                     name="medicine"
+                    v-model="this.medicine"
                     class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   >
-                    <option>United States</option>
-                    <option>Canada</option>
-                    <option>Mexico</option>
+                    <option
+                      v-for="medicine of this.medicines"
+                      :key="medicine.id"
+                      :value="medicine.id"
+                      :selected="medicine.id == this.medicine"
+                    >
+                      {{ medicine.name }}
+                    </option>
                   </select>
                 </div>
               </div>

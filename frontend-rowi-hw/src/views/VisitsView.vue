@@ -8,29 +8,25 @@ export default {
   data() {
     return {
       date: "",
-      popupIsActive: 0,
       visits: [],
       doctors: [],
       medicines: [],
       patients: [],
       errors: [],
       newVisit: 0,
-
-      /*  visitDate: "",
-      visitPlace: "",
-      patient: "",
-      doctor: "",
-      medicine: "",
-      diagnosis: "",
-      recommendation: "",*/
+      dataRange: ref(),
+      sortedVisits: [],
+      searchByDisease: "",
+      searchByDiseaseCount: 0,
+      isSorting: 0,
     };
   },
   props: ["id"],
 
-  // Fetches data when the component is created.
   created() {
     this.init();
   },
+  mounted() {},
   methods: {
     init() {
       this.getPatients();
@@ -39,7 +35,6 @@ export default {
       this.getDoctors();
     },
     dateChanged() {
-      console.log(this.date);
       return this.date;
     },
     getPatients() {
@@ -98,7 +93,37 @@ export default {
         setTimeout(this.$toast.clear, 500);
       }
     },
-    getVisitById() {},
+    getPatientsCountByDisease() {
+      if (!this.searchByDisease) {
+        this.$toast.error(`Input Disease name!.`);
+        return;
+      }
+      this.searchByDiseaseCount = this.visits.filter(
+        (visit) => visit.diagnosis == this.searchByDisease
+      ).length;
+      this.searchByDiseaseCount > 0
+        ? this.$toast.success(`Updated.`)
+        : this.$toast.info(`No Results :(`);
+    },
+    getVisitsByDate() {
+      if (!this.dataRange) {
+        this.$toast.error(`Select search date Range.`);
+      } else {
+        this.isSorting = 1;
+        this.sortedVisits = this.visits.filter(
+          (visit) =>
+            (new Date(visit.visitDate).getTime() >=
+              new Date(this.dataRange[0]).getTime()) &
+            (new Date(visit.visitDate).getTime() <=
+              new Date(this.dataRange[1]).getTime())
+        );
+        if (this.sortedVisits.length) {
+          this.$toast.success(`Filtered.`);
+        } else {
+          this.$toast.error(`Nothing to show.`);
+        }
+      }
+    },
     modalClose() {
       this.newVisit = 0;
     },
@@ -109,17 +134,62 @@ export default {
 <template>
   <div>
     <div class="details flex justify-center">
-      <i><DocumentationIcon /></i>
-      <a href="/visits"><h3>Visits</h3></a>
-      <span>
-        ---
-        <button class="btn btn-sucsess" @click="this.newVisit = 1">
-          New
-        </button></span
+      <button
+        class="bg-green-500 hover:bg-green-900 px-2 py-2 rounded-md flex text-white"
+        @click="this.newVisit = 1"
       >
+        <i class="px-1 self-center"><DocumentationIcon /></i>
+        New Visit
+      </button>
+    </div>
+    <div class="py-4 flex justify-between w-4/5 m-auto">
+      <span class="w-3/10">Search visit by DateRange</span>
+      <Datepicker
+        class="w-2/5"
+        v-model="this.dataRange"
+        @cleared="this.isSorting = 0"
+        range
+      />
+      <button
+        class="w-1/5 bg-green-400 rounded-md text-white hover:bg-green-700"
+        @click="getVisitsByDate"
+      >
+        search
+      </button>
+    </div>
+    <div class="py-4 flex justify-between w-4/5 m-auto">
+      <span class="w-3/10">Get Patient count by disease(diagnosis)</span>
+      <input
+        type="text"
+        v-model="this.searchByDisease"
+        name="searchByDisease"
+        id="searchByDisease"
+        placeholder="Disease name..."
+        class="w-2/5 py-2 px-4 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md"
+      />
+      <button
+        class="w-1/5 bg-green-400 rounded-md text-white hover:bg-green-700"
+        @click="getPatientsCountByDisease"
+      >
+        Get
+      </button>
+      <span class="px-4 py-5 text-center" v-if="this.searchByDiseaseCount">{{
+        this.searchByDiseaseCount
+      }}</span>
     </div>
     <div class="flex flex-col" v-if="!this.$route.params.id">
+      <div v-if="this.sortedVisits && this.isSorting">
+        <span v-for="visit in this.sortedVisits" :key="visit.id" class="w-full">
+          <VisitsItem
+            :data="visit"
+            :patients="this.patients"
+            :doctors="this.doctors"
+            :medicines="this.medicines"
+          />
+        </span>
+      </div>
       <VisitsItem
+        v-else
         v-for="visit of this.visits"
         :key="visit.id"
         :data="visit"
@@ -129,17 +199,19 @@ export default {
       />
     </div>
     <div class="flex flex-col" v-else>
-      <span v-for="visit in this.visits" :key="visit.id" class="w-full">
-        <VisitsItem
-          :data="visit"
-          :patients="this.patients"
-          :doctors="this.doctors"
-          :medicines="this.medicines"
-          v-if="visit.id == this.$route.params.id"
-        />
-      </span>
+      <div>
+        <span v-for="visit in this.visits" :key="visit.id" class="w-full">
+          <VisitsItem
+            :data="visit"
+            :patients="this.patients"
+            :doctors="this.doctors"
+            :medicines="this.medicines"
+            v-if="visit.id == this.$route.params.id"
+          />
+        </span>
+      </div>
     </div>
-    <!-- This example requires Tailwind CSS v2.0+ -->
+
     <div
       v-if="this.newVisit"
       class="invisible0 fixed z-10 inset-0 overflow-y-auto"
@@ -155,7 +227,6 @@ export default {
           aria-hidden="true"
         ></div>
 
-        <!-- This element is to trick the browser into centering the modal contents. -->
         <span
           class="hidden sm:inline-block sm:align-middle sm:h-screen"
           aria-hidden="true"
@@ -174,7 +245,7 @@ export default {
                 :doctors="this.doctors"
                 :medicines="this.medicines"
                 @modalClose="this.modalClose()"
-                @patientsRefresh="this.getPatients()"
+                @visitsRefresh="this.getVisits()"
               />
             </div>
           </div>
