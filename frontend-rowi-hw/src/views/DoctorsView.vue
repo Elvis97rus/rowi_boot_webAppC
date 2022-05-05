@@ -8,10 +8,7 @@ export default {
   data() {
     return {
       date: "",
-      visits: [],
       doctors: [],
-      medicines: [],
-      patients: [],
       errors: [],
       newDoctor: 0,
     };
@@ -23,51 +20,16 @@ export default {
   },
   methods: {
     init() {
-      this.getPatients();
-      this.getVisits();
-      this.getMedicines();
       this.getDoctors();
     },
     dateChanged() {
-      console.log(this.date);
       return this.date;
     },
     modalClose() {
-      console.log("modalClose()");
-      this.newPatient = 0;
-    },
-    getPatients() {
-      HTTP.get(`/api/patients`)
-        .then((response) => {
-          this.patients = response.data;
-          return this.patients;
-        })
-        .catch((e) => {
-          this.errors.push(e);
-        });
-    },
-    getMedicines() {
-      HTTP.get(`/api/medicines`)
-        .then((response) => {
-          this.medicines = response.data;
-          return this.medicines;
-        })
-        .catch((e) => {
-          this.errors.push(e);
-        });
-    },
-    getVisits() {
-      HTTP.get(`/api/visits`)
-        .then((response) => {
-          this.visits = response.data;
-          console.log(this.visits.filter(this.$route.params.id));
-          return this.visits;
-        })
-        .catch((e) => {
-          this.errors.push(e);
-        });
+      this.newDoctor = 0;
     },
     getDoctors() {
+      console.log("reftrests");
       HTTP.get(`/api/doctors`)
         .then((response) => {
           this.doctors = response.data;
@@ -134,7 +96,7 @@ export default {
                 :data="{}"
                 :popup="1"
                 @modalClose="this.modalClose()"
-                @patientsRefresh="this.getDoctors()"
+                @doctorsRefresh="this.getDoctors()"
               />
             </div>
           </div>

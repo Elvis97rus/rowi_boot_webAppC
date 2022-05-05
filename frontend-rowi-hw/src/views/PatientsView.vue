@@ -18,7 +18,6 @@ export default {
   },
   props: ["id"],
 
-  // Fetches data when the component is created.
   created() {
     this.init();
   },
@@ -27,11 +26,9 @@ export default {
       this.getPatients();
     },
     dateChanged() {
-      console.log(this.date);
       return this.date;
     },
     modalClose() {
-      //console.log("modalClose()");
       this.newPatient = 0;
     },
     getPatients() {
@@ -76,7 +73,6 @@ export default {
         />
       </span>
     </div>
-    <!-- This example requires Tailwind CSS v2.0+ -->
     <div
       v-if="this.newPatient"
       class="fixed z-10 inset-0 overflow-y-auto"
@@ -92,7 +88,6 @@ export default {
           aria-hidden="true"
         ></div>
 
-        <!-- This element is to trick the browser into centering the modal contents. -->
         <span
           class="hidden sm:inline-block sm:align-middle sm:h-screen"
           aria-hidden="true"

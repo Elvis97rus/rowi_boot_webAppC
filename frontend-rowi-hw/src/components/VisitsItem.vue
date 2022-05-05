@@ -25,7 +25,6 @@ export default {
   methods: {
     async save() {
       if (!this.id) {
-        console.log("post");
         let response = await HTTP.post(`/api/visits`, {
           name: this.name,
           gender: this.gender,
@@ -203,10 +202,7 @@ export default {
                   />
                 </div>
 
-                <div
-                  class="col-span-6 sm:col-span-6 lg:col-span-2"
-                  v-if="this.isSingleItem || this.popupCreateItem"
-                >
+                <div class="col-span-6 sm:col-span-6 lg:col-span-2">
                   <label
                     for="diagnosis"
                     class="block text-sm font-medium text-gray-700"

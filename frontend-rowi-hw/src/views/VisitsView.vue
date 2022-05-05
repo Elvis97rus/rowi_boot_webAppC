@@ -16,6 +16,9 @@ export default {
       newVisit: 0,
       dataRange: ref(),
       sortedVisits: [],
+      searchByDisease: "",
+      searchByDiseaseCount: 0,
+      isSorting: 0,
     };
   },
   props: ["id"],
@@ -32,7 +35,6 @@ export default {
       this.getDoctors();
     },
     dateChanged() {
-      console.log(this.date);
       return this.date;
     },
     getPatients() {
@@ -91,10 +93,23 @@ export default {
         setTimeout(this.$toast.clear, 500);
       }
     },
+    getPatientsCountByDisease() {
+      if (!this.searchByDisease) {
+        this.$toast.error(`Input Disease name!.`);
+        return;
+      }
+      this.searchByDiseaseCount = this.visits.filter(
+        (visit) => visit.diagnosis == this.searchByDisease
+      ).length;
+      this.searchByDiseaseCount > 0
+        ? this.$toast.success(`Updated.`)
+        : this.$toast.info(`No Results :(`);
+    },
     getVisitsByDate() {
       if (!this.dataRange) {
         this.$toast.error(`Select search date Range.`);
       } else {
+        this.isSorting = 1;
         this.sortedVisits = this.visits.filter(
           (visit) =>
             (new Date(visit.visitDate).getTime() >=
@@ -129,7 +144,12 @@ export default {
     </div>
     <div class="py-4 flex justify-between w-4/5 m-auto">
       <span class="w-3/10">Search visit by DateRange</span>
-      <Datepicker class="w-2/5" v-model="this.dataRange" range />
+      <Datepicker
+        class="w-2/5"
+        v-model="this.dataRange"
+        @cleared="this.isSorting = 0"
+        range
+      />
       <button
         class="w-1/5 bg-green-400 rounded-md text-white hover:bg-green-700"
         @click="getVisitsByDate"
@@ -137,8 +157,28 @@ export default {
         search
       </button>
     </div>
+    <div class="py-4 flex justify-between w-4/5 m-auto">
+      <span class="w-3/10">Get Patient count by disease(diagnosis)</span>
+      <input
+        type="text"
+        v-model="this.searchByDisease"
+        name="searchByDisease"
+        id="searchByDisease"
+        placeholder="Disease name..."
+        class="w-2/5 py-2 px-4 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md"
+      />
+      <button
+        class="w-1/5 bg-green-400 rounded-md text-white hover:bg-green-700"
+        @click="getPatientsCountByDisease"
+      >
+        Get
+      </button>
+      <span class="px-4 py-5 text-center" v-if="this.searchByDiseaseCount">{{
+        this.searchByDiseaseCount
+      }}</span>
+    </div>
     <div class="flex flex-col" v-if="!this.$route.params.id">
-      <div v-if="this.sortedVisits && this.dataRange">
+      <div v-if="this.sortedVisits && this.isSorting">
         <span v-for="visit in this.sortedVisits" :key="visit.id" class="w-full">
           <VisitsItem
             :data="visit"

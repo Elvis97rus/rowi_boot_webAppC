@@ -19,7 +19,6 @@ export default {
   methods: {
     async save() {
       if (!this.id) {
-        console.log("post");
         let response = await HTTP.post(`/api/patients`, {
           name: this.name,
           gender: this.gender,

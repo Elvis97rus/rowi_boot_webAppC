@@ -14,11 +14,11 @@ export default {
       sideEffects: "",
       errors: [],
       newMedicine: 0,
+      searcSideEffecthMedicineId: 0,
     };
   },
   props: ["id"],
 
-  // Fetches data when the component is created.
   created() {
     this.init();
   },
@@ -27,11 +27,9 @@ export default {
       this.getMedicines();
     },
     dateChanged() {
-      console.log(this.date);
       return this.date;
     },
     modalClose() {
-      console.log("modalClose()");
       this.newMedicine = 0;
     },
     getPatients() {
@@ -54,7 +52,11 @@ export default {
           this.errors.push(e);
         });
     },
-    getSideEffectById() {},
+    getSideEffectById() {
+      this.sideEffectGet = this.medicines.filter(
+        (medicine) => medicine.id == this.searcSideEffecthMedicineId
+      )[0].sideEffects;
+    },
   },
 };
 </script>
@@ -70,6 +72,43 @@ export default {
         New Medicine
       </button>
     </div>
+    <div class="details flex justify-around" v-if="!this.$route.params.id">
+      <span class="m-auto px-4"
+        >To get medicine side effects, you need to...</span
+      >
+      <select
+        class="w-1/5 h-12 m-auto bg-white px-4 py-4 m-auto hover:bg-green-300 rounded-md"
+        @change="getSideEffectById"
+        name="sideEffectByMedicine"
+        id="sideEffectByMedicine"
+        v-model="this.searcSideEffecthMedicineId"
+      >
+        <option value="0" class="" selected>... Select Medicine ...</option>
+        <option
+          v-for="medicine in this.medicines"
+          :key="medicine.id"
+          :value="medicine.id"
+        >
+          {{ medicine.name }}
+        </option>
+      </select>
+      <div class="w-1/2 py-4 px-4 border-indigo-500 rounded-md">
+        <label
+          for="sideEffects"
+          class="block text-sm font-medium text-gray-700"
+        >
+          Side Effects
+        </label>
+
+        <textarea
+          v-model="this.sideEffectGet"
+          id="sideEffects"
+          name="sideEffects"
+          rows="3"
+          class="w-full pointer-events-none outline-none shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 py-1 px-1 block sm:text-sm border border-gray-300 rounded-md"
+        ></textarea>
+      </div>
+    </div>
     <div class="flex flex-col" v-if="!this.$route.params.id">
       <MedicinesItem
         v-for="medicine of this.medicines"
@@ -77,9 +116,7 @@ export default {
         :data="medicine"
       />
     </div>
-    <div class="flex flex-col" v-else>
-      <label for="searchBy"></label>
-      <input id="searchBy" type="text" name="searchBy" />
+    <div class="flex flex-col 1" v-else>
       <span
         v-for="medicine in this.medicines"
         :key="medicine.id"

@@ -16,11 +16,10 @@ export default {
     };
   },
   props: ["data", "popup"],
-  emits: ["modalClose", "patientsRefresh"],
+  emits: ["modalClose", "doctorsRefresh"],
   methods: {
     async save() {
       if (!this.id) {
-        console.log("post");
         let response = await HTTP.post(`/api/doctors`, {
           name: this.name,
         });
@@ -28,7 +27,6 @@ export default {
         if (response.data) {
           this.$toast.success(`Created.`);
           this.popupCreateItem = 0;
-          setTimeout(this.$toast.clear, 100);
         }
       } else {
         let response = await HTTP.put(`/api/doctors/${this.id}`, {
@@ -36,13 +34,12 @@ export default {
           name: this.name,
         });
 
-        let instance = this.$toast.success(`Updated.`);
-        this.$toast.clear;
+        this.$toast.success(`Updated.`);
       }
       this.refreshClose();
     },
     refreshClose() {
-      this.$emit("patientsRefresh");
+      this.$emit("doctorsRefresh");
       this.$emit("modalClose");
     },
   },

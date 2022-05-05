@@ -22,7 +22,6 @@ export default {
   methods: {
     async save() {
       if (!this.id) {
-        console.log("post");
         let response = await HTTP.post(`/api/medicines`, {
           name: this.name,
           useMethod: this.useMethod,
@@ -33,7 +32,6 @@ export default {
         if (response.data) {
           this.$toast.success(`Created.`);
           this.popupCreateItem = 0;
-          setTimeout(this.$toast.clear, 100);
         }
       } else {
         let response = await HTTP.put(`/api/medicines/${this.id}`, {
@@ -47,7 +45,6 @@ export default {
         //if (response.data) {
         let instance = this.$toast.success(`Updated.`);
         //setTimeout(instance.dismiss(), 100);
-        this.$toast.clear;
         //}
       }
       this.refreshClose();
@@ -63,7 +60,6 @@ export default {
     const textInputOptions = ref({
       format: "MM/dd/yyyy",
     });
-    console.log(this.popup);
     this.id = this.data.id ?? 0;
     this.name = this.data.name ?? "";
     this.useMethod = this.data.useMethod ?? "";
