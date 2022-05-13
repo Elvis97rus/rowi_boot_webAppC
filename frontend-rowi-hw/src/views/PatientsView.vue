@@ -63,12 +63,16 @@ export default {
         v-for="patient of this.patients"
         :key="patient.id"
         :data="patient"
+        @modalClose="this.modalClose()"
+        @patientsRefresh="this.getPatients()"
       />
     </div>
     <div class="flex flex-col" v-else>
       <span v-for="patient in this.patients" :key="patient.id" class="w-full">
         <PatientsItem
           :data="patient"
+          @modalClose="this.modalClose()"
+          @patientsRefresh="this.getPatients()"
           v-if="patient.id == this.$route.params.id"
         />
       </span>

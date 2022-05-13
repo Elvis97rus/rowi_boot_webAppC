@@ -47,7 +47,7 @@ namespace WebApp_c.Controllers
 
             _context.Medicines.Add(medicine);
             _context.SaveChanges();
-            return CreatedAtAction("GetMedicines", new Medicine { Id = medicine.Id }, medicine);
+            return CreatedAtAction("GetMedicineItem", new Medicine { Id = medicine.Id }, medicine);
         }
 
         // Put: /api/medicines/n

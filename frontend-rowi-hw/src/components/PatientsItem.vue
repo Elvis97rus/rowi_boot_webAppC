@@ -74,7 +74,7 @@ export default {
   <div class="mt-10 sm:mt-0 py-2">
     <span
       class="text-lg float-right cursor-pointer ml-5"
-      v-if="this.popupCreateItem"
+      v-if="this.popup"
       @click="this.refreshClose()"
       >&times;</span
     >
@@ -114,7 +114,7 @@ export default {
                     id="name"
                     v-model="this.name"
                     :class="
-                      this.isSingleItem
+                      this.isSingleItem || this.popup
                         ? 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
                         : 'pointer-events-none outline-none mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
                     "
@@ -131,7 +131,7 @@ export default {
                     name="gender"
                     v-model="this.gender"
                     :class="
-                      this.isSingleItem
+                      this.isSingleItem || this.popup
                         ? 'mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
                         : 'pointer-events-none outline-none mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
                     "
@@ -149,7 +149,7 @@ export default {
                   >
                   <Datepicker
                     :class="
-                      this.isSingleItem
+                      this.isSingleItem || this.popup
                         ? ''
                         : 'pointer-events-none outline-none'
                     "
@@ -160,7 +160,7 @@ export default {
 
                 <div
                   class="col-span-6 sm:col-span-3"
-                  v-if="this.isSingleItem || this.popupCreateItem"
+                  v-if="this.isSingleItem || this.popup"
                 >
                   <label
                     for="address"
@@ -173,7 +173,7 @@ export default {
                     name="address"
                     id="address"
                     :class="
-                      this.isSingleItem
+                      this.isSingleItem || this.popup
                         ? 'mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
                         : 'pointer-events-none outline-none mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
                     "
@@ -183,7 +183,7 @@ export default {
             </div>
             <div
               class="px-4 py-3 bg-gray-50 text-right sm:px-6"
-              v-if="this.isSingleItem || this.popupCreateItem"
+              v-if="this.isSingleItem || this.popup"
             >
               <button
                 type="submit"
