@@ -50,7 +50,7 @@ namespace WebApp_c.Controllers
         {
             _context.Visits.Add(visit);
             _context.SaveChanges();
-            return CreatedAtAction("GetVisit", new Visit { Id = visit.Id }, visit);
+            return CreatedAtAction("GetVisitItem", new Visit { Id = visit.Id }, visit);
         }
 
         // Put: /api/visits/n

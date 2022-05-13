@@ -29,7 +29,6 @@ export default {
       this.newDoctor = 0;
     },
     getDoctors() {
-      console.log("reftrests");
       HTTP.get(`/api/doctors`)
         .then((response) => {
           this.doctors = response.data;
@@ -60,11 +59,18 @@ export default {
         v-for="doctor of this.doctors"
         :key="doctor.id"
         :data="doctor"
+        @modalClose="this.modalClose()"
+        @doctorsRefresh="this.getDoctors()"
       />
     </div>
     <div class="flex flex-col" v-else>
       <span v-for="doctor in this.doctors" :key="doctor.id" class="w-full">
-        <DoctorsItem :data="doctor" v-if="doctor.id == this.$route.params.id" />
+        <DoctorsItem
+          :data="doctor"
+          v-if="doctor.id == this.$route.params.id"
+          @modalClose="this.modalClose()"
+          @doctorsRefresh="this.getDoctors()"
+        />
       </span>
     </div>
     <div

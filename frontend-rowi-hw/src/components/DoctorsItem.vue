@@ -97,7 +97,7 @@ export default {
                     id="name"
                     v-model="this.name"
                     :class="
-                      this.isSingleItem
+                      this.isSingleItem || this.popupCreateItem
                         ? 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
                         : 'pointer-events-none outline-none mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
                     "

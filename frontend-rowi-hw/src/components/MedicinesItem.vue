@@ -74,7 +74,7 @@ export default {
   <div class="mt-10 sm:mt-0 py-2">
     <span
       class="text-lg float-right cursor-pointer ml-5"
-      v-if="this.popupCreateItem"
+      v-if="this.popup"
       @click="this.refreshClose()"
       >&times;</span
     >
@@ -114,9 +114,9 @@ export default {
                     id="name"
                     v-model="this.name"
                     :class="
-                      this.isSingleItem
+                      this.popup || this.isSingleItem
                         ? 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
-                        : 'pointer-events-none outline-none mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                        : ' pointer-events-none outline-none mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
                     "
                   />
                 </div>
@@ -132,9 +132,9 @@ export default {
                     id="useMethod"
                     v-model="this.useMethod"
                     :class="
-                      this.isSingleItem
+                      this.isSingleItem || this.popup
                         ? 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
-                        : 'pointer-events-none outline-none mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                        : ' pointer-events-none outline-none mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
                     "
                   />
                 </div>
@@ -150,9 +150,9 @@ export default {
                     id="effects"
                     v-model="this.effects"
                     :class="
-                      this.isSingleItem
+                      this.isSingleItem || this.popup
                         ? 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
-                        : 'pointer-events-none outline-none mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                        : ' pointer-events-none outline-none mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
                     "
                   />
                 </div>
@@ -168,9 +168,9 @@ export default {
                     id="sideEffects"
                     v-model="this.sideEffects"
                     :class="
-                      this.isSingleItem
+                      this.isSingleItem || this.popup
                         ? 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
-                        : 'pointer-events-none outline-none mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                        : ' pointer-events-none outline-none mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
                     "
                   />
                 </div>

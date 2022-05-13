@@ -185,6 +185,7 @@ export default {
             :patients="this.patients"
             :doctors="this.doctors"
             :medicines="this.medicines"
+            @visitsRefresh="this.getVisits()"
           />
         </span>
       </div>
@@ -196,6 +197,7 @@ export default {
         :patients="this.patients"
         :doctors="this.doctors"
         :medicines="this.medicines"
+        @visitsRefresh="this.getVisits()"
       />
     </div>
     <div class="flex flex-col" v-else>
@@ -207,6 +209,7 @@ export default {
             :doctors="this.doctors"
             :medicines="this.medicines"
             v-if="visit.id == this.$route.params.id"
+            @visitsRefresh="this.getVisits()"
           />
         </span>
       </div>

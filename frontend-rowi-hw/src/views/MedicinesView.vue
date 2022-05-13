@@ -114,6 +114,8 @@ export default {
         v-for="medicine of this.medicines"
         :key="medicine.id"
         :data="medicine"
+        @modalClose="this.modalClose()"
+        @medicinesRefresh="this.getMedicines()"
       />
     </div>
     <div class="flex flex-col 1" v-else>
@@ -125,6 +127,8 @@ export default {
         <MedicinesItem
           :data="medicine"
           v-if="medicine.id == this.$route.params.id"
+          @modalClose="this.modalClose()"
+          @medicinesRefresh="this.getMedicines()"
         />
       </span>
     </div>
